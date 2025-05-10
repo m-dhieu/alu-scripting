@@ -1,2 +1,1 @@
-# alu-scripting
-A repository covering fundamental regular expressions concepts.
+Fundamental regular expressions concepts.
