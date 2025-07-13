@@ -51,3 +51,4 @@ if __name__ == "__main__":
         exit(1)
 
     top_ten(sys.argv[1])
+
