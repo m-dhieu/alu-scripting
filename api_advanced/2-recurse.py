@@ -1,7 +1,16 @@
 #!/usr/bin/python3
 """
-Module to recursively query Reddit API,
-and return a list of all hot article titles for a given subreddit.
+Module to recursively query the Reddit API and return a list of all hot article titles
+for a given subreddit. If no results are found or the subreddit is invalid, returns None.
+
+Usage:
+    python3 2-recurse.py <subreddit>
+
+Arguments:
+    subreddit (str): The name of the subreddit to query.
+
+Returns:
+    list: A list of titles of all hot articles, or None if subreddit is invalid.
 """
 
 import os
@@ -18,7 +27,11 @@ USER_AGENT = f"ubuntu:alu-scripting:v1.0 (by /u/{USERNAME})"
 def get_token():
     """Get OAuth2 token using Reddit script app password grant."""
     auth = HTTPBasicAuth(CLIENT_ID, CLIENT_SECRET)
-    data = {'grant_type': 'password', 'username': USERNAME, 'password': PASSWORD}
+    data = {
+        'grant_type': 'password',
+        'username': USERNAME,
+        'password': PASSWORD
+    }
     headers = {'User-Agent': USER_AGENT}
     res = requests.post(
         'https://www.reddit.com/api/v1/access_token',
@@ -34,12 +47,12 @@ def recurse(subreddit, hot_list=None, after=None):
     Recursively queries the Reddit API to gather all hot post titles.
 
     Args:
-        subreddit (str): target subreddit
-        hot_list (list): accumulator for titles
-        after (str): pagination token
+        subreddit (str): The name of the subreddit to query.
+        hot_list (list): Accumulator for titles during recursion.
+        after (str): Pagination token for Reddit API.
 
     Returns:
-        list: all titles or None if subreddit invalid
+        list: A list of titles of all hot articles, or None if subreddit is invalid.
     """
     if hot_list is None:
         hot_list = []
@@ -69,3 +82,19 @@ def recurse(subreddit, hot_list=None, after=None):
 
         next_after = data.get('after')
         if next_after:
+            return recurse(subreddit, hot_list, next_after)
+        return hot_list
+
+    except requests.RequestException:
+        return None
+
+
+if __name__ == "__main__":
+    import sys
+
+    if len(sys.argv) != 2:
+        print(f"Usage: {sys.argv[0]} <subreddit>")
+        sys.exit(1)
+
+    titles = recurse(sys.argv[1])
+    print(len(titles)) if titles is not None else print("None")
