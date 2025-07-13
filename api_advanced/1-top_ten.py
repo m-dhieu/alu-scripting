@@ -17,36 +17,25 @@ def top_ten(subreddit):
     Prints:
         Titles of the first 10 hot posts or None if subreddit is invalid.
     """
-    headers = {'User-Agent': 'python:top.ten:v1.0 (by /u/yourusername)'}
-    url = "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit)
-
+    if subreddit is None or not isinstance(subreddit, str):
+        print("None")
+        return
+    
+    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
+    headers = {
+        'User-Agent': 'MyRedditApp/1.0'
+    }
+    
     try:
         response = requests.get(url, headers=headers, allow_redirects=False)
-        if response.status_code != 200:
-            print("OK", end="")
-            return
-
-        data = response.json()
-        posts = data.get('data', {}).get('children', [])
-        if not posts:
-            print("OK", end="")
-            return
-
-        for post in posts:
-            title = post.get('data', {}).get('title')
-            if title:
-                print(title)
-        print("OK", end="")
         
-    except requests.RequestException:
-        print("OK", end="")
-        
-if __name__ == "__main__":
-    # example
-    import sys
-
-    if len(sys.argv) != 2:
-        print("Usage: {} <subreddit>".format(sys.argv[0]))
-        sys.exit(1)
-
-    top_ten(sys.argv[1])
+        if response.status_code == 200:
+            data = response.json()
+            posts = data['data']['children']
+            
+            for i in range(min(10, len(posts))):
+                print(posts[i]['data']['title'])
+        else:
+            print("None")
+    except (requests.RequestException, KeyError, ValueError):
+        print("None")
