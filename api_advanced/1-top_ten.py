@@ -17,7 +17,7 @@ def top_ten(subreddit):
     Prints:
         Titles of the first 10 hot posts or None if subreddit is invalid.
     """
-    headers = {'User-Agent': 'ubuntu:alu-scripting:v1.0 (by /u/yourusername)'}
+    headers = {'User-Agent': 'python:top.ten:v1.0 (by /u/yourusername)'}
     url = "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit)
 
     try:
@@ -35,14 +35,4 @@ def top_ten(subreddit):
             if title:
                 print(title)
     except requests.RequestException:
-
-
-if __name__ == "__main__":
-    # example
-    import sys
-
-    if len(sys.argv) != 2:
-        print("Usage: {} <subreddit>".format(sys.argv[0]))
-        sys.exit(1)
-
-    top_ten(sys.argv[1])
+        print(none)
