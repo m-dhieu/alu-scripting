@@ -15,31 +15,29 @@ def top_ten(subreddit):
         subreddit (str): The name of the subreddit.
 
     Prints:
-        Titles of the first 10 hot posts and 'OK' if subreddit is valid,
-        or 'None' if subreddit is invalid.
+        Titles of the first 10 hot posts or None if subreddit is invalid.
     """
     headers = {'User-Agent': 'ubuntu:alu-scripting:v1.0 (by /u/yourusername)'}
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=10"
+    url = "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit)
 
     try:
         response = requests.get(url, headers=headers, allow_redirects=False)
         if response.status_code != 200:
-            print("None")
+            print(None)
             return
 
         data = response.json()
         posts = data.get('data', {}).get('children', [])
         if not posts:
-            print("None")
+            print(None)
             return
 
         for post in posts:
             title = post.get('data', {}).get('title')
             if title:
                 print(title)
-        print("OK")
     except requests.RequestException:
-        print("None")
+        print(None)
 
 
 if __name__ == "__main__":
@@ -47,7 +45,8 @@ if __name__ == "__main__":
     import sys
 
     if len(sys.argv) != 2:
-        print(f"Usage: {sys.argv[0]} <subreddit>")
-        exit(1)
+        print("Usage: {} <subreddit>".format(sys.argv[0]))
+        sys.exit(1)
 
     top_ten(sys.argv[1])
+    
