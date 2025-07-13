@@ -35,4 +35,4 @@ def top_ten(subreddit):
             if title:
                 print(title)
     except requests.RequestException:
-        print(none)
+        return
