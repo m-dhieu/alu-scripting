@@ -1,13 +1,12 @@
 #!/usr/bin/python3
 """
-Module to recursively query Reddit API,
-and return a list of all hot article titles for a given subreddit.
+Module to recursively query Reddit API and return a list of all hot article
+titles for a given subreddit.
 """
 
 import requests
 
 
-def recurse(subreddit, hot_list=None, after=None):
 def recurse(subreddit, hot_list=None, after=None):
     """
     Recursively queries the Reddit API.
@@ -20,9 +19,9 @@ def recurse(subreddit, hot_list=None, after=None):
         after (str): Pagination token for Reddit API.
 
     Returns:
-        list or None: List of titles of all hot articles, or None if subreddit is invalid.
+        list or None: List of titles of all hot articles, or None if subreddit
+        is invalid.
     """
-
     if hot_list is None:
         hot_list = []
 
@@ -64,7 +63,6 @@ def recurse(subreddit, hot_list=None, after=None):
 
 
 if __name__ == "__main__":
-    # example
     import sys
 
     if len(sys.argv) != 2:
