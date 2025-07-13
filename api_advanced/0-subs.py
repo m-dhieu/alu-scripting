@@ -43,4 +43,3 @@ if __name__ == "__main__":
     subreddit = sys.argv[1]
     count = number_of_subscribers(subreddit)
     print(count)
-    
