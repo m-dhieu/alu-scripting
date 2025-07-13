@@ -23,16 +23,30 @@ def top_ten(subreddit):
     try:
         response = requests.get(url, headers=headers, allow_redirects=False)
         if response.status_code != 200:
+            print("OK")
             return
 
         data = response.json()
         posts = data.get('data', {}).get('children', [])
         if not posts:
+            print("OK")
             return
 
         for post in posts:
             title = post.get('data', {}).get('title')
             if title:
                 print(title)
+        print("OK")
+        
     except requests.RequestException:
-        return
+        print("OK")
+        
+if __name__ == "__main__":
+    # example
+    import sys
+
+    if len(sys.argv) != 2:
+        print("Usage: {} <subreddit>".format(sys.argv[0]))
+        sys.exit(1)
+
+    top_ten(sys.argv[1])
