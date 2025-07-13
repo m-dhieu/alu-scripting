@@ -23,13 +23,11 @@ def top_ten(subreddit):
     try:
         response = requests.get(url, headers=headers, allow_redirects=False)
         if response.status_code != 200:
-            print(None)
             return
 
         data = response.json()
         posts = data.get('data', {}).get('children', [])
         if not posts:
-            print(None)
             return
 
         for post in posts:
@@ -37,7 +35,6 @@ def top_ten(subreddit):
             if title:
                 print(title)
     except requests.RequestException:
-        print(None)
 
 
 if __name__ == "__main__":
@@ -49,4 +46,3 @@ if __name__ == "__main__":
         sys.exit(1)
 
     top_ten(sys.argv[1])
-    
