@@ -50,4 +50,3 @@ if __name__ == "__main__":
 
     top_ten(sys.argv[1])
     
-    
