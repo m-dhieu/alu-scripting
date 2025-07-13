@@ -4,7 +4,29 @@ Module to print titles of the first 10 hot posts for a given subreddit.
 """
 
 import requests
+from requests.auth import HTTPBasicAuth
 
+CLIENT_ID = 'YOUR_CLIENT_ID'
+CLIENT_SECRET = 'YOUR_CLIENT_SECRET'
+REDDIT_USERNAME = 'YOUR_USERNAME'
+REDDIT_PASSWORD = 'YOUR_PASSWORD'
+
+def get_token():
+    """
+    Obtain OAuth2 access token from Reddit using script app and password grant.
+    """
+    auth = HTTPBasicAuth(CLIENT_ID, CLIENT_SECRET)
+    data = {
+        'grant_type': 'password',
+        'username': REDDIT_USERNAME,
+        'password': REDDIT_PASSWORD
+    }
+    headers = {'User-Agent': 'ubuntu:alu-scripting:v1.0 (by /u/' + REDDIT_USERNAME + ')'}
+    res = requests.post('https://www.reddit.com/api/v1/access_token',
+                        auth=auth, data=data, headers=headers)
+    if res.status_code != 200:
+        return None
+    return res.json().get('access_token')
 
 def top_ten(subreddit):
     """
