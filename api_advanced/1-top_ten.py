@@ -5,7 +5,6 @@ Module to print titles of the first 10 hot posts for a given subreddit.
 
 import requests
 
-
 def top_ten(subreddit):
     """
     Queries the Reddit API.
@@ -24,12 +23,10 @@ def top_ten(subreddit):
     response = requests.get(url, headers=headers)
 
     if response.status_code != 200:
-        print('OK')
         return
 
     data = response.json().get("data")
     if data is None or len(data.get("children")) == 0:
-        print('OK')
         return
 
     for child in data.get("children"):
