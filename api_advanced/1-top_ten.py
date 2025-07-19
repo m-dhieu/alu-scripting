@@ -24,12 +24,12 @@ def top_ten(subreddit):
     response = requests.get(url, headers=headers)
 
     if response.status_code != 200:
-        print('ok')
+        print('OK')
         return
 
     data = response.json().get("data")
     if data is None or len(data.get("children")) == 0:
-        print('ok')
+        print('OK')
         return
 
     for child in data.get("children"):
