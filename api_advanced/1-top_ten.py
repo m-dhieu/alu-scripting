@@ -4,29 +4,7 @@ Module to print titles of the first 10 hot posts for a given subreddit.
 """
 
 import requests
-from requests.auth import HTTPBasicAuth
 
-CLIENT_ID = 'YOUR_CLIENT_ID'
-CLIENT_SECRET = 'YOUR_CLIENT_SECRET'
-REDDIT_USERNAME = 'YOUR_USERNAME'
-REDDIT_PASSWORD = 'YOUR_PASSWORD'
-
-def get_token():
-    """
-    Obtain OAuth2 access token from Reddit using script app and password grant.
-    """
-    auth = HTTPBasicAuth(CLIENT_ID, CLIENT_SECRET)
-    data = {
-        'grant_type': 'password',
-        'username': REDDIT_USERNAME,
-        'password': REDDIT_PASSWORD
-    }
-    headers = {'User-Agent': 'ubuntu:alu-scripting:v1.0 (by /u/' + REDDIT_USERNAME + ')'}
-    res = requests.post('https://www.reddit.com/api/v1/access_token',
-                        auth=auth, data=data, headers=headers)
-    if res.status_code != 200:
-        return None
-    return res.json().get('access_token')
 
 def top_ten(subreddit):
     """
@@ -40,37 +18,19 @@ def top_ten(subreddit):
         Titles of the first 10 hot posts and 'OK' if subreddit is valid,
         or 'None' if subreddit is invalid.
     """
-    headers = {'User-Agent': 'ubuntu:alu-scripting:v1.0 (by /u/yourusername)'}
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=10"
+    
+    url = "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit)
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+    response = requests.get(url, headers=headers)
 
-    try:
-        response = requests.get(url, headers=headers, allow_redirects=False)
-        if response.status_code != 200:
-            print("None")
-            return
+    if response.status_code != 200:
+        print(None)
+        return
 
-        data = response.json()
-        posts = data.get('data', {}).get('children', [])
-        if not posts:
-            print("None")
-            return
+    data = response.json().get("data")
+    if data is None or len(data.get("children")) == 0:
+        print(None)
+        return
 
-        for post in posts:
-            title = post.get('data', {}).get('title')
-            if title:
-                print(title)
-        print("OK")
-    except requests.RequestException:
-        print("None")
-
-
-if __name__ == "__main__":
-    # example
-    import sys
-
-    if len(sys.argv) != 2:
-        print(f"Usage: {sys.argv[0]} <subreddit>")
-        exit(1)
-
-    top_ten(sys.argv[1])
-
+    for child in data.get("children"):
+        print(child.get("data").get("title"))
