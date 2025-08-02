@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Function to print hot posts on a given Reddit subreddit."""
+"""Contains top_ten function"""
 import requests
 
 
@@ -7,7 +7,8 @@ def top_ten(subreddit):
     """Print the titles of the 10 hottest posts on a given subreddit."""
     url = "https://www.reddit.com/r/{}/hot/.json".format(subreddit)
     headers = {
-        "User-Agent": "Mozilla/5.0"
+        "User-Agent": "0x16-api_advanced:project:\
+v1.0.0 (by /u/firdaus_cartoon_jr)"
     }
     params = {
         "limit": 10
@@ -19,3 +20,4 @@ def top_ten(subreddit):
         return
     results = response.json().get("data")
     [print(c.get("data").get("title")) for c in results.get("children")]
+    
